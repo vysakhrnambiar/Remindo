@@ -6,7 +6,7 @@ The kitty is there because she has little kitty things in her car. When I was de
 
 If it sounds useful to you too, you're welcome to use it, change the skin, or make your own version. I hope it helps you keep track of something you care about.
 
-**[Download the Android APK](downloads/Remindo.apk?raw=true)** · **[Open the PDF quick guide](output/pdf/Remindo-Quick-Guide.pdf)**
+**[Download the Android APK](downloads/Remindo.apk?raw=true)** · **[Open the PDF quick guide](output/pdf/Remindo-Quick-Guide.pdf)** · **[Changelog](CHANGELOG.md)**
 
 ![Three screens from the installed app: today's reminders, the evening water check-in, and the saved history entry.](preview/app-preview.png)
 
