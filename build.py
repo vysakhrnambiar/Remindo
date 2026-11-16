@@ -30,6 +30,6 @@ os.environ["AMMU_SIGN_PASSWORD"]=password.read_text().strip()
 if not key.exists():
     run(jdk/"keytool.exe","-genkeypair","-keystore",key,"-storepass:env","AMMU_SIGN_PASSWORD","-alias","ammu","-keyalg","RSA","-keysize","3072","-validity","10000","-dname","CN=Ammu Reminders")
 signer=[jdk/"java.exe","-jar",bt/"lib/apksigner.jar"]
-run(*signer,"sign","--ks",key,"--ks-pass","env:AMMU_SIGN_PASSWORD","--out","Ammu-Reminders.apk",build/"aligned.apk")
-run(*signer,"verify","--verbose","Ammu-Reminders.apk")
+run(*signer,"sign","--ks",key,"--ks-pass","env:AMMU_SIGN_PASSWORD","--out","Remindo.apk",build/"aligned.apk")
+run(*signer,"verify","--verbose","Remindo.apk")
 

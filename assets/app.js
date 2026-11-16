@@ -17,7 +17,7 @@ function goEntry(id){origin=page;entry(id);}
 function entryCard(e){return `<button class="card" onclick="goEntry(${e.id})"><small>${stamp(e.due)}</small><strong>${esc(e.title)}</strong><span class="tag">${esc(e.outcome||'Awaiting feedback')}</span>${e.note?`<p class="note">${esc(e.note)}</p>`:''}</button>`;}
 function home(){
  reload();const pending=state.entries.filter(e=>!e.outcome);
- shell('home',`<p class="sub">${new Date().toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'})}</p><h1>Ammu’s reminders</h1><div class="hero">${art('water')}</div>
+ shell('home',`<p class="sub">${new Date().toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'})}</p><h1>Remindo</h1><div class="hero">${art('water')}</div>
  ${(!state.alerts||!state.exact)?'<button class="card yellow" onclick="settings()"><strong>Set up reminder delivery ›</strong><small>Check notification and alarm permissions</small></button>':''}
  <div class="row"><h2>My reminders</h2><button class="link" onclick="editor()">＋ New</button></div>
  ${state.goals.length?state.goals.map(g=>`<button class="card pink" onclick="editor(${g.id})"><strong>${esc(g.title)}</strong><small>Next nudge · ${stamp(g.next)}</small><small>${g.mode==='daily'?'Daily check-in · '+esc(g.feedback):'Check in with each nudge'}</small></button>`).join(''):'<button class="card pink" onclick="editor()"><strong>Create your first reminder →</strong><small>Start with water, email, or your own goal.</small></button>'}
