@@ -1,35 +1,54 @@
-# Ammu Reminders
+# Reminder App
 
-Ammu Reminders is an offline Android app for recurring goals. For example, the water template sends a nudge every three hours and asks once in the evening how the day went. Email and custom reminders can ask for feedback after each occurrence.
+I made this little Android app for my sister. She wanted a nudge now and then, but she also wanted to keep a record and see how she was doing. Water was a good example. A reminder every few hours is handy, but who wants to fill out a form every time they pick up a glass? So the app nudges her during the day and asks just once in the evening how it went.
 
-![Today, evening check-in, and history screens](preview/app-preview.png)
+The kitty is there because she has little kitty things in her car. When I was deciding what the app should look like, that part was easy.
 
-## Using the app
+If it sounds useful to you too, you're welcome to use it, change the skin, or make your own version. I hope it helps you keep track of something you care about.
 
-Requires Android 8 or newer. Open Settings in the app to enable notifications and precise alarms. Choose **Today → + New** to set up a goal. History shows results, pending check-ins and comments by date range. Reminder schedules and feedback stay in the app's local SQLite database.
+**[Download the Android APK](downloads/Ammu-Reminders.apk?raw=true)** · **[Open the illustrated PDF guide](output/pdf/Ammu-Reminders-Quick-Guide.pdf)**
 
-[Illustrated quick guide (PDF)](output/pdf/Ammu-Reminders-Quick-Guide.pdf)
+![Three screens from the installed app: today's reminders, the evening water check-in, and the saved history entry.](preview/app-preview.png)
 
-## Build on Windows
+## A day with it
 
-Install Python 3, a Windows x64 JDK 17, and Android SDK Platform 35 and Build Tools 35.0.0. From the repository root, arrange the tools as follows (copy the installed directories or use directory junctions):
+1. In **Today**, tap **+ New** and choose **Water**, **Email**, or **Custom**. Set how often you want a nudge and when you want to give feedback.
+2. When the check-in arrives, tap it and say how it went. A note like “I drank 1.5 liters” tells you more than a tick mark. If you dismiss the notification, the question waits under **Waiting for feedback**.
+3. Open **History** to see your results and comments for a week, month, or date range. With one evening check-in, a whole day of water nudges counts as one goal.
+
+On the phone the app is called **Ammu Reminders**. It works offline on Android 8 or newer. After installation, open its **Settings** to enable notifications and precise alarms. Your schedules and feedback stay on your phone.
+
+<details>
+<summary><b>Make it yours: change the skin</b></summary>
+
+The skin is part of the app source. Fork or download this project, change the files below, then rebuild the APK.
+
+| To change | Edit |
+| --- | --- |
+| Colors, text sizes, buttons, cards | [assets/style.css](assets/style.css). For example, change the primary button background from strawberry pink (`#b8315c`) to teal (`#286d65`) in the `.primary` rule. |
+| Today and check-in artwork | Replace [water.jpg](assets/water.jpg) and [evening.jpg](assets/evening.jpg) with landscape pictures of your own. Keep the filenames. Update the image description in the `art` function in [app.js](assets/app.js) for screen readers. |
+| Home screen icon | Replace [kitty.png](res/drawable-nodpi/kitty.png) with a square PNG. |
+| Display name and headings | Edit `android:label` in [AndroidManifest.xml](AndroidManifest.xml) and the headings in [app.js](assets/app.js). |
+
+</details>
+
+<details>
+<summary><b>Build your own APK on Windows</b></summary>
+
+Use Python 3, a Windows x64 JDK 17, Android SDK Platform 35, and Android Build Tools 35.0.0. Put the complete tool directories under `.tools` so these paths exist:
 
     .tools/jdk-17/bin/javac.exe
     .tools/build-tools-35/aapt.exe
     .tools/build-tools-35/lib/d8.jar
     .tools/android-35/android.jar
 
-Run `python build.py`. The script creates and verifies `Ammu-Reminders.apk`. On the first build it generates a signing key in `.signing/`. Back up this directory privately to sign future updates with the same key. Each developer's key is unique.
+Run `python build.py` from the project folder. It creates and verifies `Ammu-Reminders.apk`. On your first build it generates your own signing key in `.signing/`. Back up that folder privately so future updates signed by you can install over your earlier builds. A build signed with your key cannot update the downloadable APK in place.
 
-## Run the recurrence checks
-
-With JDK 17 on PATH, run these commands from the repository root:
+To run the recurrence checks with JDK 17 on PATH:
 
     javac -d build/rules src/Rule.java tests/RuleCheck.java
     java -cp build/rules app.ammu.reminders.RuleCheck
 
-The checks cover hourly windows, fortnightly schedules, leap years, and month-end recurrence.
+</details>
 
-## License
-
-[MIT](LICENSE).
+[MIT license](LICENSE)
