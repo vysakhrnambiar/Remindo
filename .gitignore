@@ -1,0 +1,11 @@
+.tools/
+.signing/
+build/
+*.apk
+*.idsig
+
+tmp/
+__pycache__/
+*.jks
+*.p12
+*.keystore
