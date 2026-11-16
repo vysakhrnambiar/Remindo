@@ -6,15 +6,16 @@ The kitty is there because she has little kitty things in her car. When I was de
 
 If it sounds useful to you too, you're welcome to use it, change the skin, or make your own version. I hope it helps you keep track of something you care about.
 
-**[Download the Android APK](downloads/Remindo.apk?raw=true)** · **[Open the illustrated PDF guide](output/pdf/Remindo-Quick-Guide.pdf)**
+**[Download the Android APK](downloads/Remindo.apk?raw=true)** · **[Open the PDF quick guide](output/pdf/Remindo-Quick-Guide.pdf)**
 
 ![Three screens from the installed app: today's reminders, the evening water check-in, and the saved history entry.](preview/app-preview.png)
 
 ## A day with it
 
-1. In **Today**, tap **+ New** and choose **Water**, **Email**, or **Custom**. Set how often you want a nudge and when you want to give feedback.
-2. When the check-in arrives, tap it and say how it went. A note like “I drank 1.5 liters” tells you more than a tick mark. If you dismiss the notification, the question waits under **Waiting for feedback**.
-3. Open **History** to see your results and comments for a week, month, or date range. With one evening check-in, a whole day of water nudges counts as one goal.
+1. In **Today**, tap **+ New**. Set a one-off date or repeat every few days, weeks, or months. Pick the weekdays for a daily task.
+2. Set nudges and feedback separately. A weekly task can nudge on several weekdays, several times per day, then ask once on Sunday evening. You can turn off nudges and keep the check-in.
+3. Open **Awaiting feedback** on Today to settle old check-ins. Choose Yes, No, Partial, Not Applicable, or Others, with an optional comment. Unanswered items stay pending.
+4. In **History**, pick a day for a recap or a range for day counts by task and outcome. Tap a count to see its dates and comments. For older tasks with several check-ins per day, one date can appear under each outcome recorded that day.
 
 If you already have Ammu Reminders installed, open the new APK and tap **Update** to keep your history. It works offline on Android 8 or newer. After installation, open its **Settings** to enable notifications and precise alarms. Your schedules and feedback stay on your phone.
 

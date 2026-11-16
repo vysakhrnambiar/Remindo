@@ -43,10 +43,10 @@ public class Bell extends android.content.BroadcastReceiver {
                     int count=0;
                     while(due<=now && count++<500){
                         LocalDate day=Instant.ofEpochMilli(due).atZone(zone).toLocalDate();
-                        long check=daily?day.atTime(LocalTime.parse(g.getString("feedback"))).atZone(zone).toInstant().toEpochMilli():due;
-                        db.execSQL("INSERT OR IGNORE INTO entries(goal,title,mode,slot,day,due,retry) VALUES(?,?,?,?,?,?,?)",
-                            new Object[]{id,g.getString("title"),g.getString("mode"),daily?day.toString():String.valueOf(due),day.toString(),check,check});
-                        recent=due;
+                        if(rule.isFeedback(due,zone)){
+                            db.execSQL("INSERT OR IGNORE INTO entries(goal,title,mode,slot,day,due,retry) VALUES(?,?,?,?,?,?,?)",
+                                new Object[]{id,g.getString("title"),g.getString("mode"),daily?day.toString():String.valueOf(due),day.toString(),due,due});
+                        }else if(rule.count>0) recent=due;
                         due=rule.next(due,zone);
                     }
                     db.execSQL("UPDATE goals SET next=? WHERE id=?",new Object[]{due,id});
@@ -56,17 +56,33 @@ public class Bell extends android.content.BroadcastReceiver {
                 wake=Math.min(wake,due);
             }
             JSONArray pending=s.rows("SELECT e.* FROM entries e JOIN goals g ON g.id=e.goal WHERE outcome='' AND g.active=1 AND retry<=? ORDER BY due DESC",String.valueOf(now));
+            SharedPreferences prefs=c.getSharedPreferences("settings",0);
+            LocalDate today=Instant.ofEpochMilli(now).atZone(zone).toLocalDate();
+            int total=s.rows("SELECT COUNT(*) AS n FROM entries JOIN goals ON goals.id=entries.goal WHERE active=1 AND outcome='' AND due<=?",String.valueOf(now)).getJSONObject(0).getInt("n");
+            boolean digest=false;
             java.util.HashSet<Long> notified=new java.util.HashSet<>();
             for(int i=0;i<pending.length();i++){
                 JSONObject e=pending.getJSONObject(i);
                 long goal=e.getLong("goal");
                 boolean first=e.getLong("due")==e.getLong("retry");
+                boolean stale=LocalDate.parse(e.getString("day")).isBefore(today);
+                if(stale || (!first && total>=3)){
+                    digest=true;
+                    long retry=today.plusDays(Store.quietEnd(now)==now || Instant.ofEpochMilli(now).atZone(zone).getHour()>=8?1:0).atTime(9,0).atZone(zone).toInstant().toEpochMilli();
+                    db.execSQL("UPDATE entries SET retry=? WHERE id=?",new Object[]{retry,e.getLong("id")});
+                    continue;
+                }
                 if((first || Store.quietEnd(now)==now) && notified.add(goal)) {
                     c.getSystemService(NotificationManager.class).cancel("nudge"+goal,1);
                     post(c,"feedback"+goal,e.getString("title"),"How did it go? Tap to check in.","entry:"+e.getLong("id"));
                 }
                 db.execSQL("UPDATE entries SET retry=? WHERE id=?",new Object[]{Store.quietEnd(now+3600000),e.getLong("id")});
             }
+            if(digest && Store.quietEnd(now)==now && !today.toString().equals(prefs.getString("backlogDay",""))){
+                post(c,"backlog","Awaiting feedback",total+" pending. Tap to review your oldest check-ins.","pending");
+                prefs.edit().putString("backlogDay",today.toString()).apply();
+            }
+            if(total==0)c.getSystemService(NotificationManager.class).cancel("backlog",1);
             JSONObject min=s.rows("SELECT MIN(retry) AS t FROM entries JOIN goals ON goals.id=entries.goal WHERE active=1 AND outcome=''").getJSONObject(0);
             wake=Math.min(wake,min.optLong("t",Long.MAX_VALUE));
             SharedPreferences p=c.getSharedPreferences("settings",0);
